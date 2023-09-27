@@ -1,0 +1,8 @@
+---
+- name: Build a high availibility node rke2 cluster
+  hosts: rke2_cluster
+  vars:
+    rke2_become: true
+    rke2_etcd_datastore: true
+  roles:
+    - role: rke2

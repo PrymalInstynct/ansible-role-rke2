@@ -3,21 +3,11 @@
 - name: Ensure target host architecture information is set as a fact
   ansible.builtin.set_fact:
     rke2_arch: "{{ rke2_arch_lookup[ansible_architecture].arch }}"
-    rke2_arch_suffix: "{{ rke2_arch_lookup[ansible_architecture].suffix }}"
   check_mode: false
 
-- name: Ensure URLs are set as facts for downloading binaries
+- name: Ensure URL is set as facts for downloading sha256sum
   ansible.builtin.set_fact:
-    rke2_binary_url: "{{ rke2_github_download_url }}/{{ rke2_release_version }}/rke2{{ rke2_arch_suffix }}"
     rke2_hash_url: "{{ rke2_github_download_url }}/{{ rke2_release_version }}/sha256sum-{{ rke2_arch }}.txt"
-  check_mode: false
-
-- name: Override rke2_binary_url and rke2_hash_url facts for testing specific commit
-  ansible.builtin.set_fact:
-    rke2_binary_url: "https://storage.googleapis.com/rke2-ci-builds/rke2{{ rke2_arch_suffix }}-{{ rke2_release_version }}"
-    rke2_hash_url: "https://storage.googleapis.com/rke2-ci-builds/rke2{{ rke2_arch_suffix }}-{{ rke2_release_version }}.sha256sum"
-  when:
-    - rke2_release_version | regex_search("^[a-z0-9]{40}$")
   check_mode: false
 
 - name: Ensure the rke2 hashsum is downloaded
@@ -27,25 +17,58 @@
   register: rke2_hash_sum_raw
   check_mode: false
 
-- name: Ensure sha256sum is set from hashsum variable
+# - name: Ensure URLs are set as facts for downloading rke2-images
+#   ansible.builtin.set_fact:
+#     rke2_image_url: "{{ rke2_github_download_url }}/{{ rke2_release_version }}/rke2-images.linux-{{ rke2_arch }}.tar.gz"
+#   check_mode: false
+
+# - name: Ensure rke2-images sha256sum is set from hashsum variable
+#   ansible.builtin.set_fact:
+#     rke2_images_hash_sum: "{{ (rke2_hash_sum_raw.content.split('\n') |
+#       select('search', 'rke2-images.linux-' + rke2_arch + '.tar.gz') |
+#       first).split() | first }}"
+#   changed_when: false
+#   check_mode: false
+
+# - name: Ensure rke2-images directory exists
+#   ansible.builtin.file:
+#     path: "{{ rke2_images_dir }}"
+#     state: directory
+#     mode: 0755
+#   become: "{{ rke2_become }}"
+
+# - name: Ensure rke2-images are downloaded
+#   ansible.builtin.get_url:
+#     url: "{{ rke2_image_url }}"
+#     dest: "{{ rke2_images_dir }}"
+#     checksum: "sha256:{{ rke2_images_hash_sum }}"
+#     mode: 0755
+#   become: "{{ rke2_become }}"
+
+- name: Ensure URLs are set as facts for downloading rke2 binary
   ansible.builtin.set_fact:
-    rke2_hash_sum: "{{ (rke2_hash_sum_raw.content.split('\n') |
-      select('search', 'rke2' + rke2_arch_suffix) |
-      reject('search', 'images') |
+    rke2_binary_url: "{{ rke2_github_download_url }}/{{ rke2_release_version }}/rke2.linux-{{ rke2_arch }}"
+  check_mode: false
+
+- name: Ensure rke2 binary sha256sum is set from hashsum variable
+  ansible.builtin.set_fact:
+    rke2_binary_hash_sum: "{{ (rke2_hash_sum_raw.content.split('\n') |
+      select('search', 'rke2.linux-' + rke2_arch) |
       first).split() | first }}"
   changed_when: false
   check_mode: false
 
-- name: Ensure installation directory exists
+- name: Ensure binary installation directory exists
   ansible.builtin.file:
     path: "{{ rke2_install_dir }}"
     state: directory
     mode: 0755
+  become: "{{ rke2_become }}"
 
 - name: Ensure rke2 binary is downloaded
   ansible.builtin.get_url:
     url: "{{ rke2_binary_url }}"
     dest: "{{ rke2_install_dir }}/rke2-{{ rke2_release_version }}"
-    checksum: "sha256:{{ rke2_hash_sum }}"
+    checksum: "sha256:{{ rke2_binary_hash_sum }}"
     mode: 0755
   become: "{{ rke2_become }}"

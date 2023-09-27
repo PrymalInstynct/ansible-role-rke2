@@ -1,0 +1,7 @@
+---
+- name: Build a single node rke2 cluster
+  hosts: control01
+  vars:
+    rke2_become: true
+  roles:
+    - role: rke2

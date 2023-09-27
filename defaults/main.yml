@@ -43,6 +43,9 @@ rke2_skip_post_checks: false
 # Installation directory for rke2
 rke2_install_dir: /usr/local/bin
 
+# Images directory for rke2
+rke2_images_dir: /var/lib/rancher/rke2/agent/images
+
 # Install using hard links rather than symbolic links
 rke2_install_hard_links: false
 

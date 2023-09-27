@@ -1,0 +1,28 @@
+---
+rke2_cluster:
+  hosts:
+    control01:
+      ansible_user: hemsworth
+      ansible_host: 10.10.120.70
+      ansible_python_interpreter: /usr/bin/python3
+      rke2_control_node: true
+    control02:
+      ansible_user: hemsworth
+      ansible_host: 10.10.120.71
+      ansible_python_interpreter: /usr/bin/python3
+      rke2_control_node: true
+    control03:
+      ansible_user: hemsworth
+      ansible_host: 10.10.120.72
+      ansible_python_interpreter: /usr/bin/python3
+      rke2_control_node: true
+    worker04:
+      ansible_user: hemsworth
+      ansible_host: 10.10.120.73
+      ansible_python_interpreter: /usr/bin/python3
+      rke2_control_node: false
+    worker05:
+      ansible_user: hemsworth
+      ansible_host: 10.10.120.74
+      ansible_python_interpreter: /usr/bin/python3
+      rke2_control_node: false
