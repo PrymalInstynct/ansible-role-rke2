@@ -1,12 +1,12 @@
 ---
 
 # Minimum supported versions
-k3s_min_version: 1.19.3
-k3s_ansible_min_version: 2.9.16
-k3s_python_min_version: 3.6
+rke2_min_version: 1.19.3
+rke2_ansible_min_version: 2.9.16
+rke2_python_min_version: 3.6
 
 # Valid states for this role
-k3s_valid_states:
+rke2_valid_states:
   - installed
   - started
   - stopped
@@ -16,12 +16,12 @@ k3s_valid_states:
   - validated
 
 # Supported init systems
-k3s_supported_init:
+rke2_supported_init:
   - systemd
   - openrc
 
 # Map ansible fact gathering architecture to a release name and suffix in github.
-k3s_arch_lookup:
+rke2_arch_lookup:
   amd64:
     arch: amd64
     suffix: ""
@@ -53,120 +53,120 @@ k3s_arch_lookup:
     arch: arm
     suffix: "-armhf"
 
-# Always default to stable channel, this will change with k3s_release_version
-k3s_release_channel: stable
+# Always default to stable channel, this will change with rke2_release_version
+rke2_release_channel: stable
 
 # K3s updates API
-k3s_api_releases: "{{ k3s_api_url }}/v1-release/channels"
+rke2_api_releases: "{{ rke2_api_url }}/v1-release/channels"
 # Download location for releases
-k3s_github_download_url: "{{ k3s_github_url }}/releases/download"
+rke2_github_download_url: "{{ rke2_github_url }}/releases/download"
 
 # Generate a runtime config dictionary
-k3s_runtime_config: "{{
-  (k3s_control_node is defined and k3s_control_node)
-  | ternary((k3s_server | default({})) | combine(k3s_agent | default({})),
-      (k3s_agent | default({})),
-      (k3s_server | default({})) | combine(k3s_agent | default({})))
+rke2_runtime_config: "{{
+  (rke2_control_node is defined and rke2_control_node)
+  | ternary((rke2_server | default({})) | combine(rke2_agent | default({})),
+      (rke2_agent | default({})),
+      (rke2_server | default({})) | combine(rke2_agent | default({})))
 }}"
 
 # Determine if a cluster should be built
-k3s_conf_build_cluster: "{{
+rke2_conf_build_cluster: "{{
   not ((ansible_play_hosts_all | length < 2)
-  and k3s_registration_address is not defined)
+  and rke2_registration_address is not defined)
 }}"
 
 # Empty array for counting the number of control plane nodes
-k3s_controller_list: []
+rke2_controller_list: []
 
 # Control plane port default
-k3s_control_plane_port: "{{ k3s_runtime_config['https-listen-port'] | default(6443) }}"
+rke2_control_plane_port: "{{ rke2_runtime_config['https-listen-port'] | default(6443) }}"
 
 # Default to the "system" systemd context, this will be "user" when running rootless
-k3s_systemd_context: system
+rke2_systemd_context: system
 
 # Directory for systemd unit files to be installed. As this role doesn't use package
 # management, this should live in /etc/systemd, not /lib/systemd
-k3s_systemd_unit_dir: "/etc/systemd/{{ k3s_systemd_context }}"
+rke2_systemd_unit_dir: "/etc/systemd/{{ rke2_systemd_context }}"
 
 # Directory for installing openrc service file
-k3s_openrc_service_dir: /etc/init.d
+rke2_openrc_service_dir: /etc/init.d
 
 # Directory for installing logrotate config
-k3s_logrotate_dir: /etc/logrotate.d
+rke2_logrotate_dir: /etc/logrotate.d
 
 # Service handler
-k3s_service_handler:
+rke2_service_handler:
   systemd: systemd
   openrc: service
 
-# Data directory location for k3s
-k3s_data_dir: "{{ k3s_runtime_config['data-dir'] | default('/var/lib/rancher/k3s') }}"
+# Data directory location for rke2
+rke2_data_dir: "{{ rke2_runtime_config['data-dir'] | default('/var/lib/rancher/rke2') }}"
 
-# Config directory location for k3s
-k3s_config_dir: "{{ k3s_config_file | dirname }}"
+# Config directory location for rke2
+rke2_config_dir: "{{ rke2_config_file | dirname }}"
 
-# Directory for gathering the k3s token for clustering. I don't see this changing.
-k3s_token_location: "{{ k3s_config_dir }}/cluster-token"
+# Directory for gathering the rke2 token for clustering. I don't see this changing.
+rke2_token_location: "{{ rke2_config_dir }}/cluster-token"
 
 # Path for additional Kubernetes Manifests
-# https://rancher.com/docs/k3s/latest/en/advanced/#auto-deploying-manifests
-k3s_server_manifests_dir: "{{ k3s_data_dir }}/server/manifests"
+# https://rancher.com/docs/rke2/latest/en/advanced/#auto-deploying-manifests
+rke2_server_manifests_dir: "{{ rke2_data_dir }}/server/manifests"
 
 # Path for static pod manifests that are deployed on the control plane
-# https://github.com/k3s-io/k3s/pull/1691
-k3s_server_pod_manifests_dir: "{{ k3s_data_dir }}/agent/pod-manifests"
+# https://github.com/rke2-io/rke2/pull/1691
+rke2_server_pod_manifests_dir: "{{ rke2_data_dir }}/agent/pod-manifests"
 
 # OS formatted strings
-k3s_os_distribution: "{{ ansible_distribution | replace(' ', '-') | lower }}"
-k3s_os_version: "{{ ansible_distribution_version | replace([' ', '.'], '-') | lower }}"
-k3s_os_distribution_version: "{{ k3s_os_distribution }}-{{ k3s_os_version }}"
-k3s_os_family: "{{ ansible_os_family | replace(' ', '-') | lower }}"
+rke2_os_distribution: "{{ ansible_distribution | replace(' ', '-') | lower }}"
+rke2_os_version: "{{ ansible_distribution_version | replace([' ', '.'], '-') | lower }}"
+rke2_os_distribution_version: "{{ rke2_os_distribution }}-{{ rke2_os_version }}"
+rke2_os_family: "{{ ansible_os_family | replace(' ', '-') | lower }}"
 
 # Packages that we need to check are installed
-k3s_check_packages:
+rke2_check_packages:
   debian-11:
     - name: iptables-legacy
       from: 1.19.2
       until: 1.22.3
-      documentation: https://rancher.com/docs/k3s/latest/en/advanced/#enabling-legacy-iptables-on-raspbian-buster
+      documentation: https://rancher.com/docs/rke2/latest/en/advanced/#enabling-legacy-iptables-on-raspbian-buster
 # - name: dummy
 #   from: 1.19.2
 #   until: 1.21.0
 #   documentation: https://example.com
 
 # Directories that we need to ensure exist
-k3s_ensure_directories_exist:
+rke2_ensure_directories_exist:
   - name: Config directory
-    path: "{{ k3s_config_dir }}"
+    path: "{{ rke2_config_dir }}"
   - name: Config.yaml.d directory
-    path: "{{ k3s_config_yaml_d_dir }}"
+    path: "{{ rke2_config_yaml_d_dir }}"
   - name: Systemd unit file directory
-    path: "{{ k3s_systemd_unit_dir }}"
+    path: "{{ rke2_systemd_unit_dir }}"
   - name: Data directory
-    path: "{{ k3s_data_dir }}"
+    path: "{{ rke2_data_dir }}"
   - name: Default local storage path
-    path: "{{ k3s_runtime_config['default-local-storage-path'] | default(omit) }}"
+    path: "{{ rke2_runtime_config['default-local-storage-path'] | default(omit) }}"
   - name: Private registry config file
-    path: "{{ (k3s_runtime_config['private-registry'] | default(omit)) | dirname }}"
+    path: "{{ (rke2_runtime_config['private-registry'] | default(omit)) | dirname }}"
 
-# Config items that should not appear in k3s_server or k3s_agent
-k3s_config_exclude:
+# Config items that should not appear in rke2_server or rke2_agent
+rke2_config_exclude:
   - setting: server
-    correction: k3s_registration_address
+    correction: rke2_registration_address
   - setting: cluster-init
-    correction: k3s_etcd_datastore
+    correction: rke2_etcd_datastore
   - setting: token
-    correction: k3s_control_token
+    correction: rke2_control_token
   - setting: token-file
-    correction: k3s_token_location
+    correction: rke2_token_location
 
 # Config items and the versions that they were introduced
-k3s_config_version_check:
+rke2_config_version_check:
   - setting: etcd-s3-bucket
     version: 1.20.6  # Prior to this there was very buggy support!
 
 # Config items that should be marked as experimental
-k3s_experimental_config:
+rke2_experimental_config:
   - setting: selinux
     until: 1.19.4
   - setting: rootless
@@ -178,7 +178,7 @@ k3s_experimental_config:
     until: 1.19.5
 
 # Config items that should be marked as deprecated
-k3s_deprecated_config:
+rke2_deprecated_config:
   - setting: no-flannel
     correction: "flannel-backend: 'none'"
     # when: 0.10.2  # Example
@@ -191,17 +191,17 @@ k3s_deprecated_config:
     when: 1.20.0
 
 # cgroup checks
-k3s_cgroup_subsys:
+rke2_cgroup_subsys:
   - name: memory
     documentation: |
       If you are running on a Raspberry Pi, see:
-      https://rancher.com/docs/k3s/latest/en/advanced/#enabling-cgroups-for-raspbian-buster
+      https://rancher.com/docs/rke2/latest/en/advanced/#enabling-cgroups-for-raspbian-buster
   - name: cpuset
     documentation: |
       If you are running Alpine Linux, see:
-      https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup
+      https://rancher.com/docs/rke2/latest/en/advanced/#additional-preparation-for-alpine-linux-setup
 
 # Drain command
-k3s_drain_command:
+rke2_drain_command:
   true: delete-emptydir-data
   false: delete-local-data

@@ -12,5 +12,5 @@
 - name: Run uninstall post checks
   ansible.builtin.import_tasks: post_checks_uninstalled.yml
   when:
-    - not k3s_skip_validation
-    - not k3s_skip_post_checks
+    - not rke2_skip_validation
+    - not rke2_skip_post_checks

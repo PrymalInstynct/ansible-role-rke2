@@ -4,11 +4,11 @@
   become: true
   vars:
     pyratlabs_issue_controller_dump: true
-    # k3s_agent:
+    # rke2_agent:
     #   snapshotter: native
   pre_tasks:
-    - name: Ensure k3s_debug is set
+    - name: Ensure rke2_debug is set
       ansible.builtin.set_fact:
-        k3s_debug: true
+        rke2_debug: true
   roles:
-    - xanmanning.k3s
+    - prymalinstynct.rke2

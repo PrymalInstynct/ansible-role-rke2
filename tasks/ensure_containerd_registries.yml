@@ -3,9 +3,9 @@
 - name: Ensure containerd registries file exists
   ansible.builtin.template:
     src: registries.yaml.j2
-    dest: "{{ k3s_config_dir }}/registries.yaml"
+    dest: "{{ rke2_config_dir }}/registries.yaml"
     mode: 0600
   notify:
-    - "Reload {{ k3s_service_handler[ansible_service_mgr] }}"
-    - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
-  become: "{{ k3s_become }}"
+    - "Reload {{ rke2_service_handler[ansible_service_mgr] }}"
+    - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
+  become: "{{ rke2_become }}"

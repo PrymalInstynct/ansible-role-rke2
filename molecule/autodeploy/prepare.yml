@@ -12,7 +12,7 @@
 
     - name: Ensure install directory and configuration directory exists
       ansible.builtin.file:
-        path: "/opt/k3s/{{ item }}"
+        path: "/opt/rke2/{{ item }}"
         state: directory
         mode: 0755
       loop:
@@ -21,6 +21,6 @@
 
     - name: Ensure data directory exists
       ansible.builtin.file:
-        path: "/var/lib/k3s-io"
+        path: "/var/lib/rke2-io"
         state: directory
         mode: 0755

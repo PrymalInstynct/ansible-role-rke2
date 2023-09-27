@@ -1,20 +1,20 @@
 ---
 
-- name: Ensure k3s service is started
+- name: Ensure rke2 service is started
   ansible.builtin.systemd:
-    name: k3s
+    name: rke2
     state: started
-    enabled: "{{ k3s_start_on_boot }}"
-  when: k3s_non_root is not defined or not k3s_non_root
-  become: "{{ k3s_become }}"
+    enabled: "{{ rke2_start_on_boot }}"
+  when: rke2_non_root is not defined or not rke2_non_root
+  become: "{{ rke2_become }}"
 
-- name: Ensure k3s service is started
+- name: Ensure rke2 service is started
   ansible.builtin.systemd:
-    name: k3s
+    name: rke2
     state: started
-    enabled: "{{ k3s_start_on_boot }}"
+    enabled: "{{ rke2_start_on_boot }}"
     scope: user
   when:
-    - k3s_non_root is defined
-    - k3s_non_root
-  become: "{{ k3s_become }}"
+    - rke2_non_root is defined
+    - rke2_non_root
+  become: "{{ rke2_become }}"

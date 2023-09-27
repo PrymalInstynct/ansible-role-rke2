@@ -5,7 +5,7 @@ worker nodes.
 
 ## Assumptions
 
-It is assumed that you have already deployed a k3s cluster using this role,
+It is assumed that you have already deployed a rke2 cluster using this role,
 you have an appropriately configured inventory and playbook to create the
 cluster.
 
@@ -20,7 +20,7 @@ Currently your `inventory.yml` looks like this, it has three nodes defined,
 ```yaml
 ---
 
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible
@@ -40,12 +40,12 @@ k3s_cluster:
 
 We have our three nodes, one control, two workers. The goal is to shrink this to
 remove excess capacity by offboarding the worker node `kube-2`. To do this we
-will set `kube-2` node to `k3s_state: uninstalled` in our inventory.
+will set `kube-2` node to `rke2_state: uninstalled` in our inventory.
 
 ```yaml
 ---
 
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible
@@ -59,7 +59,7 @@ k3s_cluster:
       ansible_user: ansible
       ansible_host: 10.10.9.4
       ansible_python_interpreter: /usr/bin/python3
-      k3s_state: uninstalled
+      rke2_state: uninstalled
 ```
 
 What you will typically see is changes to your control plane (`kube-0`) and the

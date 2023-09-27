@@ -1,6 +1,6 @@
 # Quickstart: K3s cluster with a HA control plane using embedded etcd
 
-This is the quickstart guide to creating your own 3 node k3s cluster with a
+This is the quickstart guide to creating your own 3 node rke2 cluster with a
 highly available control plane using the embedded etcd datastore.
 The control plane will all be workers as well.
 
@@ -39,25 +39,25 @@ Here's a YAML based example inventory for our servers called `inventory.yml`:
 ```yaml
 ---
 
-# We're adding k3s_control_node to each host, this can be done in host_vars/
+# We're adding rke2_control_node to each host, this can be done in host_vars/
 # or group_vars/ as well - but for simplicity we are setting it here.
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible
       ansible_host: 10.10.9.2
       ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: true
+      rke2_control_node: true
     kube-1:
       ansible_user: ansible
       ansible_host: 10.10.9.3
       ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: true
+      rke2_control_node: true
     kube-2:
       ansible_user: ansible
       ansible_host: 10.10.9.4
       ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: true
+      rke2_control_node: true
 
 ```
 
@@ -82,19 +82,19 @@ kube-2 | SUCCESS => {
 
 ## Playbook
 
-Here is our playbook for the k3s cluster (`ha_cluster.yml`):
+Here is our playbook for the rke2 cluster (`ha_cluster.yml`):
 
 ```yaml
 ---
 
 - name: Build a cluster with HA control plane
-  hosts: k3s_cluster
+  hosts: rke2_cluster
   vars:
-    k3s_become: true
-    k3s_etcd_datastore: true
-    k3s_use_experimental: true  # Note this is required for k3s < v1.19.5+k3s1
+    rke2_become: true
+    rke2_etcd_datastore: true
+    rke2_use_experimental: true  # Note this is required for rke2 < v1.19.5+rke21
   roles:
-    - role: xanmanning.k3s
+    - role: prymalinstynct.rke2
 ```
 
 ## Execution
@@ -117,7 +117,7 @@ kube-2                     : ok=47   changed=9    unreachable=0    failed=0    s
 
 ## Testing
 
-After logging into any of the servers (it doesn't matter), we can test that k3s
+After logging into any of the servers (it doesn't matter), we can test that rke2
 is running across the cluster, that all nodes are ready and that everything is
 ready to execute our Kubernetes workloads by running the following:
 
@@ -126,16 +126,16 @@ ready to execute our Kubernetes workloads by running the following:
 
 :hand: Note we are using `sudo` because we need to be root to access the
 kube config for this node. This behavior can be changed with specifying
-`write-kubeconfig-mode: '0644'` in `k3s_server`.
+`write-kubeconfig-mode: '0644'` in `rke2_server`.
 
 **Get Nodes**:
 
 ```text
 ansible@kube-0:~$ sudo kubectl get nodes -o wide
 NAME     STATUS   ROLES         AGE     VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-kube-0   Ready    etcd,master   2m58s   v1.19.4+k3s1   10.10.9.2     10.10.9.2     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-k3s1
-kube-1   Ready    etcd,master   2m22s   v1.19.4+k3s1   10.10.9.3     10.10.9.3     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-k3s1
-kube-2   Ready    etcd,master   2m10s   v1.19.4+k3s1   10.10.9.4     10.10.9.4     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-k3s1
+kube-0   Ready    etcd,master   2m58s   v1.19.4+rke21   10.10.9.2     10.10.9.2     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-rke21
+kube-1   Ready    etcd,master   2m22s   v1.19.4+rke21   10.10.9.3     10.10.9.3     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-rke21
+kube-2   Ready    etcd,master   2m10s   v1.19.4+rke21   10.10.9.4     10.10.9.4     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-rke21
 ```
 
 **Get Pods**:

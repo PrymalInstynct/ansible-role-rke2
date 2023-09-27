@@ -9,38 +9,38 @@
 - name: Flush Handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Run k3s binary download and install tasks
+- name: Run rke2 binary download and install tasks
   ansible.builtin.import_tasks: ensure_downloads.yml
-  when: not k3s_airgap
+  when: not rke2_airgap
 
-- name: Run k3s binary upload tasks | k3s_airgap
+- name: Run rke2 binary upload tasks | rke2_airgap
   ansible.builtin.import_tasks: ensure_uploads.yml
-  when: k3s_airgap
+  when: rke2_airgap
 
 - name: Run auto-deploy manifests and pod manifests tasks
-  ansible.builtin.import_tasks: ensure_k3s_auto_deploy.yml
+  ansible.builtin.import_tasks: ensure_rke2_auto_deploy.yml
 
-- name: Ensure k3s configuration files are copied to controllers and agents
-  ansible.builtin.import_tasks: ensure_k3s_config_files.yml
+- name: Ensure rke2 configuration files are copied to controllers and agents
+  ansible.builtin.import_tasks: ensure_rke2_config_files.yml
 
-- name: Run k3s installation tasks
+- name: Run rke2 installation tasks
   ansible.builtin.import_tasks: ensure_installed.yml
 
 - name: Ensure containerd registries
   ansible.builtin.include_tasks: ensure_containerd_registries.yml
   when:
-    - (k3s_registries.mirrors | default(None)) != None or (k3s_registries.configs | default(None) != None)
-    - ('rootless' not in k3s_runtime_config or not k3s_runtime_config.rootless)
+    - (rke2_registries.mirrors | default(None)) != None or (rke2_registries.configs | default(None) != None)
+    - ('rootless' not in rke2_runtime_config or not rke2_runtime_config.rootless)
 
 - name: Run cluster pre-checks
   ansible.builtin.include_tasks: pre_checks_cluster.yml
   when:
-    - k3s_control_delegate is defined
-    - k3s_control_delegate == inventory_hostname
+    - rke2_control_delegate is defined
+    - rke2_control_delegate == inventory_hostname
 
-- name: Run k3s cluster tasks
+- name: Run rke2 cluster tasks
   ansible.builtin.import_tasks: ensure_cluster.yml
   when:
-    - k3s_build_cluster is defined
-    - k3s_build_cluster
-    - k3s_registration_address is defined
+    - rke2_build_cluster is defined
+    - rke2_build_cluster
+    - rke2_registration_address is defined

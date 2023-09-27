@@ -4,9 +4,9 @@
   become: true
   vars:
     molecule_is_test: true
-    k3s_server: "{{ lookup('file', 'k3s_server.yml') | from_yaml }}"
-    k3s_agent: "{{ lookup('file', 'k3s_agent.yml') | from_yaml }}"
-    k3s_airgap: true
-    k3s_release_version: latest
+    rke2_server: "{{ lookup('file', 'rke2_server.yml') | from_yaml }}"
+    rke2_agent: "{{ lookup('file', 'rke2_agent.yml') | from_yaml }}"
+    rke2_airgap: true
+    rke2_release_version: latest
   roles:
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

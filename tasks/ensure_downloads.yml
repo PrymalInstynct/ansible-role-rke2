@@ -2,35 +2,35 @@
 
 - name: Ensure target host architecture information is set as a fact
   ansible.builtin.set_fact:
-    k3s_arch: "{{ k3s_arch_lookup[ansible_architecture].arch }}"
-    k3s_arch_suffix: "{{ k3s_arch_lookup[ansible_architecture].suffix }}"
+    rke2_arch: "{{ rke2_arch_lookup[ansible_architecture].arch }}"
+    rke2_arch_suffix: "{{ rke2_arch_lookup[ansible_architecture].suffix }}"
   check_mode: false
 
 - name: Ensure URLs are set as facts for downloading binaries
   ansible.builtin.set_fact:
-    k3s_binary_url: "{{ k3s_github_download_url }}/{{ k3s_release_version }}/k3s{{ k3s_arch_suffix }}"
-    k3s_hash_url: "{{ k3s_github_download_url }}/{{ k3s_release_version }}/sha256sum-{{ k3s_arch }}.txt"
+    rke2_binary_url: "{{ rke2_github_download_url }}/{{ rke2_release_version }}/rke2{{ rke2_arch_suffix }}"
+    rke2_hash_url: "{{ rke2_github_download_url }}/{{ rke2_release_version }}/sha256sum-{{ rke2_arch }}.txt"
   check_mode: false
 
-- name: Override k3s_binary_url and k3s_hash_url facts for testing specific commit
+- name: Override rke2_binary_url and rke2_hash_url facts for testing specific commit
   ansible.builtin.set_fact:
-    k3s_binary_url: "https://storage.googleapis.com/k3s-ci-builds/k3s{{ k3s_arch_suffix }}-{{ k3s_release_version }}"
-    k3s_hash_url: "https://storage.googleapis.com/k3s-ci-builds/k3s{{ k3s_arch_suffix }}-{{ k3s_release_version }}.sha256sum"
+    rke2_binary_url: "https://storage.googleapis.com/rke2-ci-builds/rke2{{ rke2_arch_suffix }}-{{ rke2_release_version }}"
+    rke2_hash_url: "https://storage.googleapis.com/rke2-ci-builds/rke2{{ rke2_arch_suffix }}-{{ rke2_release_version }}.sha256sum"
   when:
-    - k3s_release_version | regex_search("^[a-z0-9]{40}$")
+    - rke2_release_version | regex_search("^[a-z0-9]{40}$")
   check_mode: false
 
-- name: Ensure the k3s hashsum is downloaded
+- name: Ensure the rke2 hashsum is downloaded
   ansible.builtin.uri:
-    url: "{{ k3s_hash_url }}"
+    url: "{{ rke2_hash_url }}"
     return_content: true
-  register: k3s_hash_sum_raw
+  register: rke2_hash_sum_raw
   check_mode: false
 
 - name: Ensure sha256sum is set from hashsum variable
   ansible.builtin.set_fact:
-    k3s_hash_sum: "{{ (k3s_hash_sum_raw.content.split('\n') |
-      select('search', 'k3s' + k3s_arch_suffix) |
+    rke2_hash_sum: "{{ (rke2_hash_sum_raw.content.split('\n') |
+      select('search', 'rke2' + rke2_arch_suffix) |
       reject('search', 'images') |
       first).split() | first }}"
   changed_when: false
@@ -38,14 +38,14 @@
 
 - name: Ensure installation directory exists
   ansible.builtin.file:
-    path: "{{ k3s_install_dir }}"
+    path: "{{ rke2_install_dir }}"
     state: directory
     mode: 0755
 
-- name: Ensure k3s binary is downloaded
+- name: Ensure rke2 binary is downloaded
   ansible.builtin.get_url:
-    url: "{{ k3s_binary_url }}"
-    dest: "{{ k3s_install_dir }}/k3s-{{ k3s_release_version }}"
-    checksum: "sha256:{{ k3s_hash_sum }}"
+    url: "{{ rke2_binary_url }}"
+    dest: "{{ rke2_install_dir }}/rke2-{{ rke2_release_version }}"
+    checksum: "sha256:{{ rke2_hash_sum }}"
     mode: 0755
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"

@@ -1,17 +1,17 @@
 ---
 
-- name: "Check that k3s_release_version >= {{ k3s_min_version }}"
+- name: "Check that rke2_release_version >= {{ rke2_min_version }}"
   ansible.builtin.assert:
     that:
-      - (k3s_release_version | replace('v', '')) is version_compare(k3s_min_version, '>=')
-    success_msg: "{{ k3s_release_version }} is supported by this role."
-    fail_msg: "{{ k3s_release_version }} is not supported by this role, please use xanmanning.k3s v1.x."
-  when: not k3s_airgap
+      - (rke2_release_version | replace('v', '')) is version_compare(rke2_min_version, '>=')
+    success_msg: "{{ rke2_release_version }} is supported by this role."
+    fail_msg: "{{ rke2_release_version }} is not supported by this role, please use prymalinstynct.rke2 v1.x."
+  when: not rke2_airgap
 
-- name: Check configuration in k3s_server and k3s_agent that needs alternate configuration
+- name: Check configuration in rke2_server and rke2_agent that needs alternate configuration
   ansible.builtin.assert:
     that:
-      - (item.setting not in k3s_runtime_config)
+      - (item.setting not in rke2_runtime_config)
     success_msg: "{{ item.setting }} not found in server/agent config"
     fail_msg: >-
       {{ item.setting }} found in server/agent config.
@@ -19,13 +19,13 @@
       {% if item.document is defined %}
       Documentation: {{ item.documentation }}
       {% endif %}
-  loop: "{{ k3s_config_exclude }}"
+  loop: "{{ rke2_config_exclude }}"
 
-- name: Check configuration in k3s_server and k3s_agent for deprecated configuration
+- name: Check configuration in rke2_server and rke2_agent for deprecated configuration
   ansible.builtin.assert:
     that:
-      - (item.setting not in k3s_runtime_config)
-        or (not k3s_runtime_config[item.setting])
+      - (item.setting not in rke2_runtime_config)
+        or (not rke2_runtime_config[item.setting])
     success_msg: "{{ item.setting }} not found in server/agent config"
     fail_msg: >-
       {{ item.setting }} found in server/agent config.
@@ -33,25 +33,25 @@
       {% if item.document is defined %}
       Documentation: {{ item.documentation }}
       {% endif %}
-  loop: "{{ k3s_deprecated_config }}"
+  loop: "{{ rke2_deprecated_config }}"
   when:
-    - not k3s_airgap
+    - not rke2_airgap
     - (item.when is not defined
-       or (item.when is defined and (k3s_release_version | replace('v', '')) is version_compare(item.when, '>=')))
-    - not k3s_use_unsupported_config
+       or (item.when is defined and (rke2_release_version | replace('v', '')) is version_compare(item.when, '>=')))
+    - not rke2_use_unsupported_config
 
-- name: Check configuration in k3s_server and k3s_agent against release version
+- name: Check configuration in rke2_server and rke2_agent against release version
   ansible.builtin.assert:
     that:
-      - (k3s_release_version | replace('v', '')) is version_compare(item.version, '>=')
-    success_msg: "{{ item.setting }} is supported by {{ k3s_release_version }}"
+      - (rke2_release_version | replace('v', '')) is version_compare(item.version, '>=')
+    success_msg: "{{ item.setting }} is supported by {{ rke2_release_version }}"
     fail_msg: >-
-      {{ item.setting }} is not supported in {{ k3s_release_version }}.
+      {{ item.setting }} is not supported in {{ rke2_release_version }}.
       Please update to v{{ item.version }} to use this option.
       {% if item.document is defined %}
       Documentation: {{ item.documentation }}
       {% endif %}
-  loop: "{{ k3s_config_version_check }}"
+  loop: "{{ rke2_config_version_check }}"
   when:
-    - k3s_config_version_check is defined
-    - item.setting in k3s_runtime_config
+    - rke2_config_version_check is defined
+    - item.setting in rke2_runtime_config

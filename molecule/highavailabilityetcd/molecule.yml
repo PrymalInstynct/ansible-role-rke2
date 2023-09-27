@@ -28,7 +28,7 @@ platforms:
     privileged: true
     pre_build_image: ${MOLECULE_PREBUILT:-true}
     networks:
-      - name: k3snet
+      - name: rke2net
   - name: node2
     image: ${MOLECULE_DISTRO:-"geerlingguy/docker-rockylinux8-ansible:latest"}
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -37,7 +37,7 @@ platforms:
     privileged: true
     pre_build_image: ${MOLECULE_PREBUILT:-true}
     networks:
-      - name: k3snet
+      - name: rke2net
   - name: node3
     image: ${MOLECULE_DISTRO:-"geerlingguy/docker-rockylinux8-ansible:latest"}
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -46,14 +46,14 @@ platforms:
     privileged: true
     pre_build_image: ${MOLECULE_PREBUILT:-true}
     networks:
-      - name: k3snet
+      - name: rke2net
   - name: loadbalancer
     image: geerlingguy/docker-rockylinux8-ansible:latest
     pre_build_image: true
     ports:
       - "6443:6443"
     networks:
-      - name: k3snet
+      - name: rke2net
 provisioner:
   name: ansible
   options:

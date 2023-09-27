@@ -1,16 +1,16 @@
 ---
 
-- name: Ensure k3s control plane server is started
+- name: Ensure rke2 control plane server is started
   ansible.builtin.systemd:
-    name: k3s
+    name: rke2
     state: started
-    enabled: "{{ k3s_start_on_boot }}"
-    scope: "{{ k3s_systemd_context }}"
-  register: k3s_systemd_start_k3s
-  until: k3s_systemd_start_k3s is succeeded
+    enabled: "{{ rke2_start_on_boot }}"
+    scope: "{{ rke2_systemd_context }}"
+  register: rke2_systemd_start_rke2
+  until: rke2_systemd_start_rke2 is succeeded
   retries: 3
   delay: 3
   failed_when:
-    - k3s_systemd_start_k3s is not succeeded
+    - rke2_systemd_start_rke2 is not succeeded
     - not ansible_check_mode
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"

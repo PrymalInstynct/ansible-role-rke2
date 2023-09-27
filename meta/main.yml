@@ -1,11 +1,11 @@
 ---
 
 galaxy_info:
-  role_name: k3s
-  namespace: xanmanning
-  author: Xan Manning
-  description: Ansible role for installing k3s as either a standalone server or HA cluster
-  company: Pyrat Ltd.
+  role_name: rke2
+  namespace: prymalinstynct
+  author: Chad Zimmerman
+  description: Ansible role for installing rke2 as either a standalone server or HA cluster
+  company: Lockheed Martin
   github_branch: main
 
   # If the issue tracker for your role is not on github, uncomment the
@@ -41,19 +41,19 @@ galaxy_info:
     - name: Alpine
       versions:
         - all
-    - name: Archlinux
+    - name: ArchLinux
       versions:
         - all
     - name: EL
       versions:
-        - 7
-        - 8
+        - "7"
+        - "8"
     - name: Amazon
     - name: Fedora
       versions:
-        - 29
-        - 30
-        - 31
+        - "29"
+        - "30"
+        - "31"
     - name: Debian
       versions:
         - buster
@@ -61,14 +61,14 @@ galaxy_info:
         - stretch
     - name: SLES
       versions:
-        - 15
+        - "15"
     - name: Ubuntu
       versions:
         - xenial
         - bionic
 
   galaxy_tags:
-    - k3s
+    - rke2
     - k8s
     - kubernetes
     - containerd

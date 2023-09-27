@@ -1,12 +1,12 @@
-# Updating k3s
+# Updating rke2
 
 ## Before you start!
 
-Ensure you back up your k3s cluster. This is particularly important if you use
+Ensure you back up your rke2 cluster. This is particularly important if you use
 an external datastore or embedded Etcd. Please refer to the below guide to
-backing up your k3s datastore:
+backing up your rke2 datastore:
 
-https://rancher.com/docs/k3s/latest/en/backup-restore/
+https://rancher.com/docs/rke2/latest/en/backup-restore/
 
 Also, check your volume backups are also working!
 
@@ -14,39 +14,39 @@ Also, check your volume backups are also working!
 
 ### Updates using Ansible
 
-To update via Ansible, set `k3s_release_version` to the target version you wish
-to go to. For example, from your `v1.19.3+k3s1` playbook:
+To update via Ansible, set `rke2_release_version` to the target version you wish
+to go to. For example, from your `v1.19.3+rke21` playbook:
 
 ```yaml
 ---
 # BEFORE
 
-- name: Provision k3s cluster
-  hosts: k3s_cluster
+- name: Provision rke2 cluster
+  hosts: rke2_cluster
   vars:
-    k3s_release_version: v1.19.3+k3s1
+    rke2_release_version: v1.19.3+rke21
   roles:
-    - name: xanmanning.k3s
+    - name: prymalinstynct.rke2
 ```
 
-Updating to `v1.20.2+k3s1`:
+Updating to `v1.20.2+rke21`:
 
 ```yaml
 ---
 # AFTER
 
-- name: Provision k3s cluster
-  hosts: k3s_cluster
+- name: Provision rke2 cluster
+  hosts: rke2_cluster
   vars:
-    k3s_release_version: v1.20.2+k3s1
+    rke2_release_version: v1.20.2+rke21
   roles:
-    - name: xanmanning.k3s
+    - name: prymalinstynct.rke2
 ```
 
 ### Automatic updates
 
 For automatic updates, consider installing Rancher's
-[system-upgrade-controller](https://rancher.com/docs/k3s/latest/en/upgrades/automated/)
+[system-upgrade-controller](https://rancher.com/docs/rke2/latest/en/upgrades/automated/)
 
 **Please note**, to be able to update using the system-upgrade-controller you
-will need to set `k3s_install_hard_links` to `true`.
+will need to set `rke2_install_hard_links` to `true`.

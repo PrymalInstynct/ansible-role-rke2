@@ -1,0 +1,47 @@
+#!/sbin/openrc-run
+
+depend() {
+    after network-online
+    want cgroups
+}
+
+start_pre() {
+    rm -f /tmp/rke2.*
+}
+
+supervisor=supervise-daemon
+name="rke2"
+command="{{ rke2_install_dir }}/rke2"
+command_args="{% filter regex_replace('\s+', ' ') %}
+{% filter replace('\n', ' ') %}
+{% if rke2_debug is defined and rke2_debug %}
+    --debug
+{% endif %}
+{% if rke2_control_node %}
+    server
+    {% if (rke2_etcd_datastore is defined and rke2_etcd_datastore) and (rke2_primary_control_node is not defined or not rke2_primary_control_node) and rke2_controller_list | length > 1 %}
+        --server https://{{ rke2_registration_address }}:{{ rke2_control_plane_port | default(6443) | string }}
+    {% endif %}
+    {% if rke2_server is defined %}
+        --config {{ rke2_config_file }}
+    {% endif %}
+    {% if not rke2_primary_control_node or rke2_control_token is defined %}
+        --token-file {{ rke2_token_location }}
+    {% endif %}
+{% else %}
+    agent
+    --server https://{{ rke2_registration_address }}:{{ rke2_control_plane_port | default(6443) | string }}
+    --token-file {{ rke2_token_location }}
+    {% if rke2_agent is defined %}
+        --config {{ rke2_config_file }}
+    {% endif %}
+{% endif %} >>/var/log/rke2.log 2>&1"
+{% endfilter %}
+{% endfilter %}
+
+output_log="/var/log/rke2.log"
+error_log="/var/log/rke2.log"
+
+pidfile="/var/run/rke2.pid"
+respawn_delay=5
+respawn_max=0

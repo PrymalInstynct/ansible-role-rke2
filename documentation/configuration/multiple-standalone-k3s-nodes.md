@@ -1,7 +1,7 @@
 # Multiple standalone K3s nodes
 
 This is an example of when you might want to configure multiple standalone
-k3s nodes simultaneously. For this we will assume a hypothetical situation
+rke2 nodes simultaneously. For this we will assume a hypothetical situation
 where we are configuring 25 Raspberry Pis to deploy to our shop floors.
 
 Each Rasperry Pi will be configured as a standalone IoT device hosting an
@@ -31,7 +31,7 @@ Below is our example inventory of 200 nodes (Truncated):
 ```yaml
 ---
 
-k3s_workers:
+rke2_workers:
    hosts:
      kube-0:
        ansible_user: ansible
@@ -60,12 +60,12 @@ k3s_workers:
 ```
 
 In our `group_vars/` (or as `vars:` in our playbook), we will need to set the
-`k3s_build_cluster` variable to `false`. This will stop the role from
-attempting to cluster all 200 nodes, instead it will install k3s across each
+`rke2_build_cluster` variable to `false`. This will stop the role from
+attempting to cluster all 200 nodes, instead it will install rke2 across each
 node as as 200 standalone servers.
 
 ```yaml
 ---
 
-k3s_build_cluster: false
+rke2_build_cluster: false
 ```

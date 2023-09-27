@@ -18,10 +18,10 @@ command like argument, for example:
 ```yaml
 ---
 
-k3s_server:
+rke2_server:
   # Set the plugins registry directory
   kubelet-arg:
-    - "volume-plugin-dir=/var/lib/rancher/k3s/agent/kubelet/plugins_registry"
+    - "volume-plugin-dir=/var/lib/rancher/rke2/agent/kubelet/plugins_registry"
   # Set the pod eviction timeout and node monitor grace period
   kube-controller-manager-arg:
     - "pod-eviction-timeout=2m"
@@ -33,7 +33,7 @@ k3s_server:
   node-label:
     - "NodeTier=development"
     - "NodeLocation=eu-west-2a"
-  # Stop k3s control plane having workloads scheduled on them
+  # Stop rke2 control plane having workloads scheduled on them
   node-taint:
-    - "k3s-controlplane=true:NoExecute"
+    - "rke2-controlplane=true:NoExecute"
 ```

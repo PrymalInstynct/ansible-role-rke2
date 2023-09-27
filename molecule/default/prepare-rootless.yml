@@ -10,14 +10,14 @@
 
     - name: Ensure a normal user exists
       ansible.builtin.user:
-        name: k3suser
+        name: rke2user
         group: user
         state: present
 
     - name: Ensure a normal user has bin directory
       ansible.builtin.file:
-        path: /home/k3suser/bin
+        path: /home/rke2user/bin
         state: directory
-        owner: k3suser
+        owner: rke2user
         group: user
         mode: 0700

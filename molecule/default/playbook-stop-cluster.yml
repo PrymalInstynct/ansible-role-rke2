@@ -4,6 +4,6 @@
   become: true
   vars:
     molecule_is_test: true
-    k3s_state: stopped
+    rke2_state: stopped
   roles:
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

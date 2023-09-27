@@ -6,7 +6,7 @@
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
         molecule_is_test: true
-        k3s_install_hard_links: true
-        k3s_release_version: stable
-        # k3s_agent:
+        rke2_install_hard_links: true
+        rke2_release_version: stable
+        # rke2_agent:
           # snapshotter: native

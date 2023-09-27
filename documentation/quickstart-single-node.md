@@ -1,6 +1,6 @@
 # Quickstart: K3s single node
 
-This is the quickstart guide to creating your own single-node k3s "cluster".
+This is the quickstart guide to creating your own single-node rke2 "cluster".
 
 :hand: This example requires your Ansible user to be able to connect to the
 server over SSH using key-based authentication. The user is also has an entry
@@ -37,7 +37,7 @@ Here's a YAML based example inventory for our server called `inventory.yml`:
 ```yaml
 ---
 
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible
@@ -58,17 +58,17 @@ kube-0 | SUCCESS => {
 
 ## Playbook
 
-Here is our playbook for a single node k3s cluster (`single_node.yml`):
+Here is our playbook for a single node rke2 cluster (`single_node.yml`):
 
 ```yaml
 ---
 
-- name: Build a single node k3s cluster
+- name: Build a single node rke2 cluster
   hosts: kube-0
   vars:
-    k3s_become: true
+    rke2_become: true
   roles:
-    - role: xanmanning.k3s
+    - role: prymalinstynct.rke2
 ```
 
 ## Execution
@@ -88,7 +88,7 @@ kube-0                     : ok=39   changed=8    unreachable=0    failed=0    s
 
 ## Testing
 
-After logging into the server, we can test that k3s is running and that it is
+After logging into the server, we can test that rke2 is running and that it is
 ready to execute our Kubernetes workloads by running the following:
 
   - `sudo kubectl get nodes`
@@ -96,14 +96,14 @@ ready to execute our Kubernetes workloads by running the following:
 
 :hand: Note we are using `sudo` because we need to be root to access the
 kube config for this node. This behavior can be changed with specifying
-`write-kubeconfig-mode: '0644'` in `k3s_server`.
+`write-kubeconfig-mode: '0644'` in `rke2_server`.
 
 **Get Nodes**:
 
 ```text
 ansible@kube-0:~$ sudo kubectl get nodes
 NAME     STATUS   ROLES    AGE     VERSION
-kube-0   Ready    master   5m27s   v1.19.4+k3s
+kube-0   Ready    master   5m27s   v1.19.4+rke2
 ansible@kube-0:~$
 ```
 

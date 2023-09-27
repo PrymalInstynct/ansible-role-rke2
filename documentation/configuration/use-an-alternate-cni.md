@@ -3,7 +3,7 @@
 K3S ships with Flannel, however sometimes you want an different CNI such as
 Calico, Canal or Weave Net. To do this you will need to disable Flannel with
 `flannel-backend: "none"`, specify a `cluster-cidr` and add your CNI manifests
-to the `k3s_server_manifests_templates`.
+to the `rke2_server_manifests_templates`.
 
 ## Calico example
 
@@ -15,19 +15,19 @@ Steps:
   1. Download `tigera-operator.yaml` to the manifests directory.
   1. Download `custom-resources.yaml` to the manifests directory.
   1. Choose a `cluster-cidr` (we are using 192.168.0.0/16)
-  1. Set `k3s_server` and `k3s_server_manifest_templates` as per the below,
+  1. Set `rke2_server` and `rke2_server_manifest_templates` as per the below,
      ensure the paths to manifests are correct for your project repo.
 
 ```yaml
 ---
 
 # K3S Server config, don't deploy flannel and set cluster pod CIDR.
-k3s_server:
+rke2_server:
   cluster-cidr: 192.168.0.0/16
   flannel-backend: "none"
 
-# Deploy the following k3s server templates.
-k3s_server_manifests_templates:
+# Deploy the following rke2 server templates.
+rke2_server_manifests_templates:
   - "manifests/calico/tigera-operator.yaml"
   - "manifests/calico/custom-resources.yaml"
 ```
@@ -37,9 +37,9 @@ All nodes should come up as "Ready", below is a 3-node cluster:
 ```text
  $ kubectl get nodes -o wide -w
 NAME     STATUS   ROLES                       AGE    VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-kube-0   Ready    control-plane,etcd,master   114s   v1.20.2+k3s1   10.10.9.2     10.10.9.2     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.3-k3s1
-kube-1   Ready    control-plane,etcd,master   80s    v1.20.2+k3s1   10.10.9.3     10.10.9.3     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.3-k3s1
-kube-2   Ready    control-plane,etcd,master   73s    v1.20.2+k3s1   10.10.9.4     10.10.9.4     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.3-k3s1
+kube-0   Ready    control-plane,etcd,master   114s   v1.20.2+rke21   10.10.9.2     10.10.9.2     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.3-rke21
+kube-1   Ready    control-plane,etcd,master   80s    v1.20.2+rke21   10.10.9.3     10.10.9.3     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.3-rke21
+kube-2   Ready    control-plane,etcd,master   73s    v1.20.2+rke21   10.10.9.4     10.10.9.4     Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.3-rke21
 ```
 
 Pods should be deployed with deployed within the CIDR specified in our config

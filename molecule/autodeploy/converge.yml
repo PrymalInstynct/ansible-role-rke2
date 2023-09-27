@@ -4,25 +4,25 @@
   become: true
   vars:
     molecule_is_test: true
-    k3s_release_version: v1.22
-    k3s_build_cluster: false
-    k3s_control_token: 55ba04e5-e17d-4535-9170-3e4245453f4d
-    k3s_install_dir: /opt/k3s/bin
-    k3s_config_file: /opt/k3s/etc/k3s_config.yaml
-    k3s_server:
-      data-dir: /var/lib/k3s-io
-      default-local-storage-path: /var/lib/k3s-io/local-storage
+    rke2_release_version: v1.22
+    rke2_build_cluster: false
+    rke2_control_token: 55ba04e5-e17d-4535-9170-3e4245453f4d
+    rke2_install_dir: /opt/rke2/bin
+    rke2_config_file: /opt/rke2/etc/rke2_config.yaml
+    rke2_server:
+      data-dir: /var/lib/rke2-io
+      default-local-storage-path: /var/lib/rke2-io/local-storage
       disable:
         - metrics-server
         - traefik
-    # k3s_agent:
+    # rke2_agent:
     #   snapshotter: native
-    k3s_server_manifests_templates:
+    rke2_server_manifests_templates:
       - "molecule/autodeploy/templates/00-ns-monitoring.yml.j2"
-    k3s_server_manifests_urls:
+    rke2_server_manifests_urls:
       - url: https://raw.githubusercontent.com/metallb/metallb/v0.9.6/manifests/namespace.yaml
         filename: 05-metallb-namespace.yml
-    k3s_service_env_vars:
+    rke2_service_env_vars:
       K3S_TEST_VAR: "Hello world!"
   roles:
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

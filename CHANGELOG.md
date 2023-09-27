@@ -14,6 +14,16 @@
 ---
 -->
 
+## 2023-09-27, v0.1
+
+### Notable changes
+
+  - refactor: Migrate role to deploy RKE2
+
+### Contributors
+
+- [PrymalInstynct](https://github.com/PrymalInstynct)
+
 ## 2023-05-17, v3.4.1
 
 ### Notable changes

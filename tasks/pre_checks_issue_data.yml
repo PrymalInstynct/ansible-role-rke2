@@ -57,7 +57,7 @@
       {% for host in ansible_play_hosts %}
       ## {{ host }}
       {% for config_key in hostvars[host] %}
-      {% if config_key | regex_search('^k3s_') %}
+      {% if config_key | regex_search('^rke2_') %}
       {{ config_key }}: {{ hostvars[host][config_key] | to_json }}
       {% endif %}
       {% endfor %}
@@ -68,8 +68,8 @@
       # Begin K3S RUNTIME CONFIG
       {% for host in ansible_play_hosts %}
       ## {{ host }}
-      {% if hostvars[host].k3s_runtime_config is defined %}
-      {{ hostvars[host].k3s_runtime_config }}
+      {% if hostvars[host].rke2_runtime_config is defined %}
+      {{ hostvars[host].rke2_runtime_config }}
       {% endif %}
       {% endfor %}
       # End K3S RUNTIME CONFIG

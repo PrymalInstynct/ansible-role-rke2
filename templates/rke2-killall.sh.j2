@@ -2,17 +2,17 @@
 
 [ $(id -u) -eq 0 ] || exec sudo $0 $@
 
-for bin in {{ k3s_runtime_config['data-dir'] | default(k3s_data_dir) }}/data/**/bin/; do
+for bin in {{ rke2_runtime_config['data-dir'] | default(rke2_data_dir) }}/data/**/bin/; do
     [ -d $bin ] && export PATH=$PATH:$bin:$bin/aux
 done
 
 set -x
 
-for service in {{ k3s_systemd_unit_dir }}/k3s*.service; do
+for service in {{ rke2_systemd_unit_dir }}/rke2*.service; do
     [ -s $service ] && systemctl stop $(basename $service)
 done
 
-for service in /etc/init.d/k3s*; do
+for service in /etc/init.d/rke2*; do
     [ -x $service ] && $service stop
 done
 
@@ -41,7 +41,7 @@ killtree() {
 }
 
 getshims() {
-    ps -e -o pid= -o args= | sed -e 's/^ *//; s/\s\s*/\t/;' | grep -w 'k3s/data/[^/]*/bin/containerd-shim' | cut -f1
+    ps -e -o pid= -o args= | sed -e 's/^ *//; s/\s\s*/\t/;' | grep -w 'rke2/data/[^/]*/bin/containerd-shim' | cut -f1
 }
 
 killtree $({ set +x; } 2>/dev/null; getshims; set -x)
@@ -50,8 +50,8 @@ do_unmount_and_remove() {
     awk -v path="$1" '$2 ~ ("^" path) { print $2 }' /proc/self/mounts | sort -r | xargs -r -t -n 1 sh -c 'umount "$0" && rm -rf "$0"'
 }
 
-do_unmount_and_remove '/run/k3s'
-do_unmount_and_remove '{{ k3s_runtime_config['data-dir'] | default(k3s_data_dir) }}'
+do_unmount_and_remove '/run/rke2'
+do_unmount_and_remove '{{ rke2_runtime_config['data-dir'] | default(rke2_data_dir) }}'
 do_unmount_and_remove '/var/lib/kubelet/pods'
 do_unmount_and_remove '/var/lib/kubelet/plugins'
 do_unmount_and_remove '/run/netns/cni-'

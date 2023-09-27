@@ -20,8 +20,8 @@
             state: directory
             mode: 0750
 
-        - name: Ensure k3s is downloaded for air-gap installation
+        - name: Ensure rke2 is downloaded for air-gap installation
           ansible.builtin.get_url:
-            url: https://github.com/k3s-io/k3s/releases/download/v1.22.5%2Bk3s1/k3s
-            dest: ./files/k3s
+            url: https://github.com/rke2-io/rke2/releases/download/v1.22.5%2Brke21/rke2
+            dest: ./files/rke2
             mode: 0755

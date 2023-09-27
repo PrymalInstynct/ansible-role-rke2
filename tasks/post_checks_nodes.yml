@@ -2,7 +2,7 @@
 
 - name: Check that all nodes to be ready
   ansible.builtin.command:
-    cmd: "{{ k3s_install_dir }}/kubectl get nodes"
+    cmd: "{{ rke2_install_dir }}/kubectl get nodes"
   changed_when: false
   failed_when: >-
     kubectl_get_nodes_result.stdout.find("was refused") != -1 or
@@ -14,8 +14,8 @@
   retries: 30
   delay: 5
   when:
-    - k3s_control_node
-    - ("flannel-backend" not in k3s_runtime_config
-       or k3s_runtime_config["flannel-backend"] != "none")
+    - rke2_control_node
+    - ("flannel-backend" not in rke2_runtime_config
+       or rke2_runtime_config["flannel-backend"] != "none")
     - not ansible_check_mode
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"

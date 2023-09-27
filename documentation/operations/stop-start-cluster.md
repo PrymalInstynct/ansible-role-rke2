@@ -1,11 +1,11 @@
 # Stopping and Starting a cluster
 
-This document describes the Ansible method for restarting a k3s cluster
+This document describes the Ansible method for restarting a rke2 cluster
 deployed by this role.
 
 ## Assumptions
 
-It is assumed that you have already deployed a k3s cluster using this role,
+It is assumed that you have already deployed a rke2 cluster using this role,
 you have an appropriately configured inventory and playbook to create the
 cluster.
 
@@ -20,8 +20,8 @@ Below, our example inventory and playbook are as follows:
 
 You can start the cluster using either of the following commands:
 
-  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'k3s_state=started'`
-  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=k3s state=started' --become all`
+  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'rke2_state=started'`
+  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=rke2 state=started' --become all`
 
 Below is example output, remember that Ansible is idempotent so re-running a
 command may not necessarily change the state.
@@ -39,8 +39,8 @@ kube-2                     : ok=6    changed=0    unreachable=0    failed=0    s
 
 You can stop the cluster using either of the following commands:
 
-  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'k3s_state=stopped'`
-  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=k3s state=stopped' --become all`
+  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'rke2_state=stopped'`
+  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=rke2 state=stopped' --become all`
 
 Below is example output, remember that Ansible is idempotent so re-running a
 command may not necessarily change the state.
@@ -59,8 +59,8 @@ kube-2                     : ok=6    changed=1    unreachable=0    failed=0    s
 Just like the `service` module, you can also specify `restarted` as a state.
 This will do `stop` followed by `start`.
 
-  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'k3s_state=restarted'`
-  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=k3s state=restarted' --become all`
+  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'rke2_state=restarted'`
+  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=rke2 state=restarted' --become all`
 
 ```text
 PLAY RECAP *******************************************************************************************************
@@ -76,8 +76,8 @@ command, or simply target your ad-hoc commands. For example, in a 3 node
 cluster (called `kube-0`, `kube-1` and `kube-2`) we can limit the restart to
 `kube-1` and `kube-2` with the following:
 
-  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'k3s_state=restarted' -l "kube-1,kube-2"`
-  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=k3s state=restarted' --become "kube-1,kube-2"`
+  - Using the playbook: `ansible-playbook -i inventory.yml cluster.yml --become -e 'rke2_state=restarted' -l "kube-1,kube-2"`
+  - Using an ad-hoc command: `ansible -i inventory.yml -m service -a 'name=rke2 state=restarted' --become "kube-1,kube-2"`
 
 ```text
 PLAY RECAP ********************************************************************************************************

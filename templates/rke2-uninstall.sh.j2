@@ -1,0 +1,50 @@
+#!/bin/sh
+set -x
+[ $(id -u) -eq 0 ] || exec sudo $0 $@
+
+/usr/local/bin/rke2-killall.sh
+
+if which systemctl; then
+    systemctl disable rke2
+    systemctl reset-failed rke2
+    systemctl daemon-reload
+fi
+if which rc-update; then
+    rc-update delete rke2 default
+fi
+
+rm -f {{ rke2_systemd_unit_dir }}/rke2.service
+
+remove_uninstall() {
+    rm -f /usr/local/bin/rke2-uninstall.sh
+}
+trap remove_uninstall EXIT
+
+if (ls {{ rke2_systemd_unit_dir }}/rke2*.service || ls /etc/init.d/rke2*) >/dev/null 2>&1; then
+    set +x; echo 'Additional rke2 services installed, skipping uninstall of rke2'; set -x
+    exit
+fi
+
+for cmd in kubectl crictl ctr; do
+    if [ -L {{ rke2_install_dir }}/$cmd ]; then
+        rm -f {{ rke2_install_dir }}/$cmd
+    fi
+done
+
+for bin in {{ rke2_install_dir }}/rke2*; do
+    if [ -f "${bin}" ]; then
+        rm -f "${bin}"
+    fi
+done
+
+rm -rf {{ rke2_config_dir }}
+rm -rf /run/rke2
+rm -rf /run/flannel
+rm -rf {{ rke2_runtime_config['data-dir'] | default(rke2_data_dir) }}
+rm -rf /var/lib/kubelet
+rm -f /usr/local/bin/rke2-killall.sh
+
+if type yum >/dev/null 2>&1; then
+    yum remove -y rke2-selinux
+    rm -f /etc/yum.repos.d/rancher-rke2-common*.repo
+fi

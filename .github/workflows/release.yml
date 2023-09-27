@@ -8,7 +8,7 @@ name: Release
 
 defaults:
   run:
-    working-directory: "xanmanning.k3s"
+    working-directory: "prymalinstynct.rke2"
 
 jobs:
   release:
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout codebase
         uses: actions/checkout@v2
         with:
-          path: "xanmanning.k3s"
+          path: "prymalinstynct.rke2"
 
       - name: Set up Python 3
         uses: actions/setup-python@v2

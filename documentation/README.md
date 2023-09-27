@@ -1,7 +1,7 @@
-# ansible-role-k3s
+# ansible-role-rke2
 
 This document describes a number of ways of consuming this Ansible role for use
-in your own k3s deployments. It will not be able to cover every use case
+in your own rke2 deployments. It will not be able to cover every use case
 scenario but will provide some common example configurations.
 
 ## Requirements
@@ -17,20 +17,20 @@ https://docs.ansible.com/ansible/latest/installation_guide/index.html
 
 ## Quickstart
 
-Below are quickstart examples for a single node k3s server, a k3s cluster
-with a single control node and HA k3s cluster. These represent the bare
+Below are quickstart examples for a single node rke2 server, a rke2 cluster
+with a single control node and HA rke2 cluster. These represent the bare
 minimum configuration.
 
-  - [Single node k3s](quickstart-single-node.md)
-  - [Simple k3s cluster](quickstart-cluster.md)
-  - [HA k3s cluster using embedded etcd](quickstart-ha-cluster.md)
+  - [Single node rke2](quickstart-single-node.md)
+  - [Simple rke2 cluster](quickstart-cluster.md)
+  - [HA rke2 cluster using embedded etcd](quickstart-ha-cluster.md)
 
 ## Example configurations and operations
 
 ### Configuration
 
   - [Setting up 2-node HA control plane with external datastore](configuration/2-node-ha-ext-datastore.md)
-  - [Provision multiple standalone k3s nodes](configuration/multiple-standalone-k3s-nodes.md)
+  - [Provision multiple standalone rke2 nodes](configuration/multiple-standalone-rke2-nodes.md)
   - [Set node labels and component arguments](configuration/node-labels-and-component-args.md)
   - [Use an alternate CNI](configuration/use-an-alternate-cni.md)
   - [IPv4/IPv6 Dual-Stack config](configuration/ipv4-ipv6-dual-stack.md)
@@ -39,6 +39,6 @@ minimum configuration.
 ### Operations
 
   - [Stop/Start a cluster](operations/stop-start-cluster.md)
-  - [Updating k3s](operations/updating-k3s.md)
+  - [Updating rke2](operations/updating-rke2.md)
   - [Extending a cluster](operations/extending-a-cluster.md)
   - [Shrinking a cluster](operations/shrinking-a-cluster.md)

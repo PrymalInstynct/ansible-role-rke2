@@ -12,8 +12,8 @@ K3S to start after Wireguard has started.
 ```yaml
 ---
 
-k3s_service_wants:
+rke2_service_wants:
   - wg-quick@wg0.service
-k3s_service_after:
+rke2_service_after:
   - wg-quick@wg0.service
 ```

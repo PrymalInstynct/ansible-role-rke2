@@ -1,42 +1,42 @@
 ---
 
-- name: Check to see if k3s-killall.sh exits
+- name: Check to see if rke2-killall.sh exits
   ansible.builtin.stat:
-    path: /usr/local/bin/k3s-killall.sh
-  register: check_k3s_killall_script
+    path: /usr/local/bin/rke2-killall.sh
+  register: check_rke2_killall_script
 
-- name: Check to see if k3s-uninstall.sh exits
+- name: Check to see if rke2-uninstall.sh exits
   ansible.builtin.stat:
-    path: /usr/local/bin/k3s-uninstall.sh
-  register: check_k3s_uninstall_script
+    path: /usr/local/bin/rke2-uninstall.sh
+  register: check_rke2_uninstall_script
 
-- name: Run k3s-killall.sh
+- name: Run rke2-killall.sh
   ansible.builtin.command:
-    cmd: /usr/local/bin/k3s-killall.sh
-  register: k3s_killall
-  changed_when: k3s_killall.rc == 0
-  when: check_k3s_killall_script.stat.exists
-  become: "{{ k3s_become }}"
+    cmd: /usr/local/bin/rke2-killall.sh
+  register: rke2_killall
+  changed_when: rke2_killall.rc == 0
+  when: check_rke2_killall_script.stat.exists
+  become: "{{ rke2_become }}"
 
-- name: Run k3s-uninstall.sh
+- name: Run rke2-uninstall.sh
   ansible.builtin.command:
-    cmd: /usr/local/bin/k3s-uninstall.sh
+    cmd: /usr/local/bin/rke2-uninstall.sh
   args:
-    removes: /usr/local/bin/k3s-uninstall.sh
-  register: k3s_uninstall
-  changed_when: k3s_uninstall.rc == 0
-  when: check_k3s_uninstall_script.stat.exists
-  become: "{{ k3s_become }}"
+    removes: /usr/local/bin/rke2-uninstall.sh
+  register: rke2_uninstall
+  changed_when: rke2_uninstall.rc == 0
+  when: check_rke2_uninstall_script.stat.exists
+  become: "{{ rke2_become }}"
 
 - name: Ensure hard links are removed
   ansible.builtin.file:
-    path: "{{ k3s_install_dir }}/{{ item }}"
+    path: "{{ rke2_install_dir }}/{{ item }}"
     state: absent
   loop:
     - kubectl
     - crictl
     - ctr
   when:
-    - k3s_install_hard_links
+    - rke2_install_hard_links
     - not ansible_check_mode
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"

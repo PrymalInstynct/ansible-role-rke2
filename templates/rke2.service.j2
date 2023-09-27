@@ -1,0 +1,71 @@
+[Unit]
+Description=Lightweight Kubernetes
+Documentation=https://rke2.io
+{% for requires_unit in rke2_service_requires %}
+Requires={{ requires_unit }}
+{% endfor %}
+Wants=network-online.target
+{% for wants_unit in rke2_service_wants %}
+Wants={{ wants_unit }}
+{% endfor %}
+{% for before_unit in rke2_service_before %}
+Before={{ before_unit }}
+{% endfor %}
+After=network-online.target
+{% for after_unit in rke2_service_after %}
+After={{ after_unit }}
+{% endfor %}
+
+[Service]
+Type={{ 'notify' if rke2_control_node else 'exec' }}
+{% if rke2_service_env_vars is defined and rke2_service_env_vars is iterable %}
+{% for env_var in rke2_service_env_vars %}
+Environment={{ env_var }}="{{ rke2_service_env_vars[env_var] }}"
+{% endfor %}
+{% endif %}
+{% if rke2_service_env_file is defined and rke2_service_env_file %}
+EnvironmentFile={{ rke2_service_env_file }}
+{% endif %}
+ExecStartPre=/bin/sh -xc '! /usr/bin/systemctl is-enabled --quiet nm-cloud-setup.service'
+ExecStartPre=-/sbin/modprobe br_netfilter
+ExecStartPre=-/sbin/modprobe overlay
+{% filter regex_replace('\s+', ' ') %}
+{% filter replace('\n', ' ') %}
+ExecStart={{ rke2_install_dir }}/rke2
+{% if rke2_debug is defined and rke2_debug %}
+    --debug
+{% endif %}
+{% if rke2_control_node %}
+    server
+    {% if (rke2_etcd_datastore is defined and rke2_etcd_datastore) and (rke2_primary_control_node is not defined or not rke2_primary_control_node) and rke2_controller_list | length > 1 %}
+        --server https://{{ rke2_registration_address }}:{{ rke2_control_plane_port | default(6443) | string }}
+    {% endif %}
+    {% if rke2_server is defined %}
+        --config {{ rke2_config_file }}
+    {% endif %}
+    {% if not rke2_primary_control_node or rke2_control_token is defined %}
+        --token-file {{ rke2_token_location }}
+    {% endif %}
+{% else %}
+    agent
+    --server https://{{ rke2_registration_address }}:{{ rke2_control_plane_port | default(6443) | string }}
+    --token-file {{ rke2_token_location }}
+    {% if rke2_agent is defined %}
+        --config {{ rke2_config_file }}
+    {% endif %}
+{% endif %}
+{% endfilter %}
+{% endfilter %}
+
+KillMode=process
+Delegate=yes
+LimitNOFILE=1048576
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+TimeoutStartSec=0
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

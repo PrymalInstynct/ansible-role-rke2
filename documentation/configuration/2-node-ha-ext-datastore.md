@@ -7,7 +7,7 @@ etcd ideally has an odd number of nodes.
 The example below will use an external PostgreSQL datastore to store the
 cluster state information.
 
-Main guide: https://rancher.com/docs/k3s/latest/en/installation/ha/
+Main guide: https://rancher.com/docs/rke2/latest/en/installation/ha/
 
 ## Architecture
 
@@ -50,30 +50,30 @@ Main guide: https://rancher.com/docs/k3s/latest/en/installation/ha/
 ## Configuration
 
 For your control nodes, you will need to instruct the control plane of the
-PostgreSQL datastore endpoint and set `k3s_registration_address` to be the
+PostgreSQL datastore endpoint and set `rke2_registration_address` to be the
 hostname or IP of your load balancer or VIP.
 
 Below is the example for PostgreSQL, it is possible to use MySQL or an Etcd
 cluster as well. Consult the below guide for using alternative datastore
 endpoints.
 
-https://rancher.com/docs/k3s/latest/en/installation/datastore/#datastore-endpoint-format-and-functionality
+https://rancher.com/docs/rke2/latest/en/installation/datastore/#datastore-endpoint-format-and-functionality
 
 ```yaml
 ---
 
-k3s_server:
+rke2_server:
   datastore-endpoint: postgres://postgres:verybadpass@database:5432/postgres?sslmode=disable
   node-taint:
-    - "k3s-controlplane=true:NoExecute"
+    - "rke2-controlplane=true:NoExecute"
 ```
 
 Your worker nodes need to know how to connect to the control plane, this is
-defined by setting `k3s_registration_address` to the hostname or IP address of
+defined by setting `rke2_registration_address` to the hostname or IP address of
 the load balancer.
 
 ```yaml
 ---
 
-k3s_registration_address: control.examplek3s.com
+rke2_registration_address: control.examplerke2.com
 ```

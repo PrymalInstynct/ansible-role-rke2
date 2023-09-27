@@ -1,6 +1,6 @@
 # Quickstart: K3s cluster with a single control node
 
-This is the quickstart guide to creating your own k3s cluster with one control
+This is the quickstart guide to creating your own rke2 cluster with one control
 plane node. This control plane node will also be a worker.
 
 :hand: This example requires your Ansible user to be able to connect to the
@@ -38,7 +38,7 @@ Here's a YAML based example inventory for our servers called `inventory.yml`:
 ```yaml
 ---
 
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible
@@ -76,17 +76,17 @@ kube-2 | SUCCESS => {
 
 ## Playbook
 
-Here is our playbook for the k3s cluster (`cluster.yml`):
+Here is our playbook for the rke2 cluster (`cluster.yml`):
 
 ```yaml
 ---
 
 - name: Build a cluster with a single control node
-  hosts: k3s_cluster
+  hosts: rke2_cluster
   vars:
-    k3s_become: true
+    rke2_become: true
   roles:
-    - role: xanmanning.k3s
+    - role: prymalinstynct.rke2
 ```
 
 ## Execution
@@ -109,7 +109,7 @@ kube-2                     : ok=43   changed=10   unreachable=0    failed=0    s
 
 ## Testing
 
-After logging into kube-0, we can test that k3s is running across the cluster,
+After logging into kube-0, we can test that rke2 is running across the cluster,
 that all nodes are ready and that everything is ready to execute our Kubernetes
 workloads by running the following:
 
@@ -118,16 +118,16 @@ workloads by running the following:
 
 :hand: Note we are using `sudo` because we need to be root to access the
 kube config for this node. This behavior can be changed with specifying
-`write-kubeconfig-mode: '0644'` in `k3s_server`.
+`write-kubeconfig-mode: '0644'` in `rke2_server`.
 
 **Get Nodes**:
 
 ```text
 ansible@kube-0:~$ sudo kubectl get nodes -o wide
 NAME     STATUS   ROLES    AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-kube-0   Ready    master   34s   v1.19.4+k3s1   10.0.2.15     <none>        Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-k3s1
-kube-2   Ready    <none>   14s   v1.19.4+k3s1   10.0.2.17     <none>        Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-k3s1
-kube-1   Ready    <none>   14s   v1.19.4+k3s1   10.0.2.16     <none>        Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-k3s1
+kube-0   Ready    master   34s   v1.19.4+rke21   10.0.2.15     <none>        Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-rke21
+kube-2   Ready    <none>   14s   v1.19.4+rke21   10.0.2.17     <none>        Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-rke21
+kube-1   Ready    <none>   14s   v1.19.4+rke21   10.0.2.16     <none>        Ubuntu 20.04.1 LTS   5.4.0-56-generic   containerd://1.4.1-rke21
 ansible@kube-0:~$
 ```
 

@@ -1,103 +1,103 @@
 ---
 
-- name: Ensure k3s is linked into the installation destination
+- name: Ensure rke2 is linked into the installation destination
   ansible.builtin.file:
-    src: "{{ k3s_install_dir }}/k3s-{{ k3s_release_version }}"
-    dest: "{{ k3s_install_dir }}/{{ item }}"
-    state: "{{ 'hard' if k3s_install_hard_links else 'link' }}"
-    force: "{{ k3s_install_hard_links }}"
+    src: "{{ rke2_install_dir }}/rke2-{{ rke2_release_version }}"
+    dest: "{{ rke2_install_dir }}/{{ item }}"
+    state: "{{ 'hard' if rke2_install_hard_links else 'link' }}"
+    force: "{{ rke2_install_hard_links }}"
     mode: 0755
   loop:
-    - k3s
+    - rke2
     - kubectl
     - crictl
     - ctr
   when: not ansible_check_mode
   notify:
-    - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
-  become: "{{ k3s_become }}"
+    - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
+  become: "{{ rke2_become }}"
 
-- name: Ensure k3s config file exists
+- name: Ensure rke2 config file exists
   ansible.builtin.template:
     src: config.yaml.j2
-    dest: "{{ k3s_config_file }}"
+    dest: "{{ rke2_config_file }}"
     mode: 0644
   notify:
-    - "Reload {{ k3s_service_handler[ansible_service_mgr] }}"
-    - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
-  become: "{{ k3s_become }}"
+    - "Reload {{ rke2_service_handler[ansible_service_mgr] }}"
+    - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
+  become: "{{ rke2_become }}"
 
 - name: Ensure cluster token is present when pre-defined
-  when: k3s_control_token is defined
+  when: rke2_control_token is defined
   block:
     - name: Ensure the cluster token file location exists
       ansible.builtin.file:
-        path: "{{ k3s_token_location | dirname }}"
+        path: "{{ rke2_token_location | dirname }}"
         state: directory
         mode: 0755
-      become: "{{ k3s_become }}"
+      become: "{{ rke2_become }}"
 
-    - name: Ensure k3s cluster token file is present
+    - name: Ensure rke2 cluster token file is present
       ansible.builtin.template:
         src: cluster-token.j2
-        dest: "{{ k3s_token_location }}"
+        dest: "{{ rke2_token_location }}"
         mode: 0600
-      become: "{{ k3s_become }}"
+      become: "{{ rke2_become }}"
       notify:
-        - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
+        - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
 
-- name: Ensure k3s service unit file is present
+- name: Ensure rke2 service unit file is present
   ansible.builtin.template:
-    src: k3s.service.j2
-    dest: "{{ k3s_systemd_unit_dir }}/k3s.service"
+    src: rke2.service.j2
+    dest: "{{ rke2_systemd_unit_dir }}/rke2.service"
     mode: 0644
   when:
-    - k3s_service_handler[ansible_service_mgr] == 'systemd'
+    - rke2_service_handler[ansible_service_mgr] == 'systemd'
   notify:
-    - "Reload {{ k3s_service_handler[ansible_service_mgr] }}"
-    - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
-  become: "{{ k3s_become }}"
+    - "Reload {{ rke2_service_handler[ansible_service_mgr] }}"
+    - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
+  become: "{{ rke2_become }}"
 
-- name: Ensure k3s service file is present
+- name: Ensure rke2 service file is present
   ansible.builtin.template:
-    src: k3s.openrc.j2
-    dest: "{{ k3s_openrc_service_dir }}/k3s"
+    src: rke2.openrc.j2
+    dest: "{{ rke2_openrc_service_dir }}/rke2"
     mode: 0744
   when:
-    - k3s_service_handler[ansible_service_mgr] == 'service'
+    - rke2_service_handler[ansible_service_mgr] == 'service'
   notify:
-    - "Reload {{ k3s_service_handler[ansible_service_mgr] }}"
-    - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
-  become: "{{ k3s_become }}"
+    - "Reload {{ rke2_service_handler[ansible_service_mgr] }}"
+    - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
+  become: "{{ rke2_become }}"
 
-- name: Ensure k3s logrotate file is present
+- name: Ensure rke2 logrotate file is present
   ansible.builtin.template:
-    src: k3s.logrotate.j2
-    dest: "{{ k3s_logrotate_dir }}/k3s"
+    src: rke2.logrotate.j2
+    dest: "{{ rke2_logrotate_dir }}/rke2"
     mode: 0640
   when:
-    - k3s_service_handler[ansible_service_mgr] == 'service'
+    - rke2_service_handler[ansible_service_mgr] == 'service'
   notify:
-    - "Reload {{ k3s_service_handler[ansible_service_mgr] }}"
-    - "Restart k3s {{ k3s_service_handler[ansible_service_mgr] }}"
-  become: "{{ k3s_become }}"
+    - "Reload {{ rke2_service_handler[ansible_service_mgr] }}"
+    - "Restart rke2 {{ rke2_service_handler[ansible_service_mgr] }}"
+  become: "{{ rke2_become }}"
 
-- name: Ensure k3s killall script is present
+- name: Ensure rke2 killall script is present
   ansible.builtin.template:
-    src: k3s-killall.sh.j2
-    dest: "/usr/local/bin/k3s-killall.sh"
+    src: rke2-killall.sh.j2
+    dest: "/usr/local/bin/rke2-killall.sh"
     mode: 0700
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"
   when:
-    - k3s_runtime_config is defined
-    - ("rootless" not in k3s_runtime_config or not k3s_runtime_config.rootless)
+    - rke2_runtime_config is defined
+    - ("rootless" not in rke2_runtime_config or not rke2_runtime_config.rootless)
 
-- name: Ensure k3s uninstall script is present
+- name: Ensure rke2 uninstall script is present
   ansible.builtin.template:
-    src: k3s-uninstall.sh.j2
-    dest: "/usr/local/bin/k3s-uninstall.sh"
+    src: rke2-uninstall.sh.j2
+    dest: "/usr/local/bin/rke2-uninstall.sh"
     mode: 0700
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"
   when:
-    - k3s_runtime_config is defined
-    - ("rootless" not in k3s_runtime_config or not k3s_runtime_config.rootless)
+    - rke2_runtime_config is defined
+    - ("rootless" not in rke2_runtime_config or not rke2_runtime_config.rootless)

@@ -5,7 +5,7 @@ nodes.
 
 ## Assumptions
 
-It is assumed that you have already deployed a k3s cluster using this role,
+It is assumed that you have already deployed a rke2 cluster using this role,
 you have an appropriately configured inventory and playbook to create the
 cluster.
 
@@ -20,7 +20,7 @@ Currently your `inventory.yml` looks like this, it has two nodes defined,
 ```yaml
 ---
 
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible
@@ -41,7 +41,7 @@ new node to our inventory.
 ```yaml
 ---
 
-k3s_cluster:
+rke2_cluster:
   hosts:
     kube-0:
       ansible_user: ansible

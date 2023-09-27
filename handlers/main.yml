@@ -3,37 +3,37 @@
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
-    scope: "{{ k3s_systemd_context }}"
-  become: "{{ k3s_become }}"
+    scope: "{{ rke2_systemd_context }}"
+  become: "{{ rke2_become }}"
 
 - name: Reload service
   ansible.builtin.set_fact:
-    k3s_service_reloaded: true
-  become: "{{ k3s_become }}"
+    rke2_service_reloaded: true
+  become: "{{ rke2_become }}"
 
-- name: Restart k3s systemd
+- name: Restart rke2 systemd
   ansible.builtin.systemd:
-    name: k3s
+    name: rke2
     state: restarted
-    scope: "{{ k3s_systemd_context }}"
-    enabled: "{{ k3s_start_on_boot }}"
+    scope: "{{ rke2_systemd_context }}"
+    enabled: "{{ rke2_start_on_boot }}"
   retries: 3
   delay: 3
-  register: k3s_systemd_restart_k3s
+  register: rke2_systemd_restart_rke2
   failed_when:
-    - k3s_systemd_restart_k3s is not success
+    - rke2_systemd_restart_rke2 is not success
     - not ansible_check_mode
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"
 
-- name: Restart k3s service
+- name: Restart rke2 service
   ansible.builtin.service:
-    name: k3s
+    name: rke2
     state: restarted
-    enabled: "{{ k3s_start_on_boot }}"
+    enabled: "{{ rke2_start_on_boot }}"
   retries: 3
   delay: 3
-  register: k3s_service_restart_k3s
+  register: rke2_service_restart_rke2
   failed_when:
-    - k3s_service_restart_k3s is not success
+    - rke2_service_restart_rke2 is not success
     - not ansible_check_mode
-  become: "{{ k3s_become }}"
+  become: "{{ rke2_become }}"
