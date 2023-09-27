@@ -46,7 +46,6 @@
     - not ansible_check_mode
     - rke2_server_manifests_urls | length > 0
 
-# https://github.com/rke2-io/rke2/pull/1691
 - name: Ensure static pod manifests are copied to controllers
   ansible.builtin.template:
     src: "{{ item }}"

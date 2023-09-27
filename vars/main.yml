@@ -113,7 +113,6 @@ rke2_token_location: "{{ rke2_config_dir }}/cluster-token"
 rke2_server_manifests_dir: "{{ rke2_data_dir }}/server/manifests"
 
 # Path for static pod manifests that are deployed on the control plane
-# https://github.com/rke2-io/rke2/pull/1691
 rke2_server_pod_manifests_dir: "{{ rke2_data_dir }}/agent/pod-manifests"
 
 # OS formatted strings

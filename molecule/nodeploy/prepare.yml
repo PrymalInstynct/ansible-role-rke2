@@ -22,6 +22,6 @@
 
         - name: Ensure rke2 is downloaded for air-gap installation
           ansible.builtin.get_url:
-            url: https://github.com/rke2-io/rke2/releases/download/v1.22.5%2Brke21/rke2
+            url: "https://github.com/rancher/rke2/releases/download/{{ rke2_release_version }}/rke2-images.linux-amd64.tar.gz"
             dest: ./files/rke2
             mode: 0755

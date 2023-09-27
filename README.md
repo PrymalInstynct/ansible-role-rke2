@@ -209,7 +209,7 @@ channel of rke2 will be installed. If you are developing against a specific
 version of rke2 you must ensure this is set in your Ansible configuration, eg:
 
 ```yaml
-rke2_release_version: v1.19.3+rke21
+rke2_release_version: v1.19.3+rke2r1
 ```
 
 It is also possible to install specific K3s "Channels", below are some
@@ -220,7 +220,7 @@ rke2_release_version: false             # defaults to 'stable' channel
 rke2_release_version: stable            # latest 'stable' release
 rke2_release_version: testing           # latest 'testing' release
 rke2_release_version: v1.19             # latest 'v1.19' release
-rke2_release_version: v1.19.3+rke23      # specific release
+rke2_release_version: v1.19.3+rke2r1      # specific release
 
 # Specific commit
 # CAUTION - only used for testing - must be 40 characters
