@@ -1,4 +1,4 @@
-# Multiple standalone K3s nodes
+# Multiple standalone RKE2 nodes
 
 This is an example of when you might want to configure multiple standalone
 rke2 nodes simultaneously. For this we will assume a hypothetical situation

@@ -53,7 +53,7 @@ consistency. These are generally cluster-level configuration.
 | `rke2_build_cluster`                  | When multiple play hosts are available, attempt to cluster. Read notes below.              | `true`                         |
 | `rke2_registration_address`           | Fixed registration address for nodes. IP or FQDN.                                          | NULL                           |
 | `rke2_github_url`                     | Set the GitHub URL to install rke2 from.                                                    | https://github.com/rancher/rke2  |
-| `rke2_api_url`                        | URL for K3S updates API.                                                                   | https://update.rke2.io          |
+| `rke2_api_url`                        | URL for RKE2 updates API.                                                                   | https://update.rke2.io          |
 | `rke2_install_dir`                    | Installation directory for rke2.                                                            | `/usr/local/bin`               |
 | `rke2_install_hard_links`             | Install using hard links rather than symbolic links.                                       | `false`                        |
 | `rke2_server_config_yaml_d_files`     | A flat list of templates to supplement the `rke2_server` configuration.                     | []                             |
@@ -68,9 +68,9 @@ consistency. These are generally cluster-level configuration.
 | `rke2_debug`                          | Enable debug logging on the rke2 service.                                                   | `false`                        |
 | `rke2_registries`                     | Registries configuration file content.                                                     | `{ mirrors: {}, configs:{} }`  |
 
-### K3S Service Configuration
+### RKE2 Service Configuration
 
-The below variables change how and when the systemd service unit file for K3S
+The below variables change how and when the systemd service unit file for RKE2
 is run. Use this with caution, please refer to the [systemd documentation](https://www.freedesktop.org/software/systemd/man/systemd.unit.html#%5BUnit%5D%20Section%20Options)
 for more information.
 
@@ -212,7 +212,7 @@ version of rke2 you must ensure this is set in your Ansible configuration, eg:
 rke2_release_version: v1.19.3+rke2r1
 ```
 
-It is also possible to install specific K3s "Channels", below are some
+It is also possible to install specific RKE2 "Channels", below are some
 examples for `rke2_release_version`:
 
 ```yaml
@@ -273,7 +273,7 @@ Hard Links:
 
 If you set `rke2_build_cluster` to `false`, this role will install each play
 host as a standalone node. An example of when you might use this would be
-when building a large number of standalone IoT devices running K3s. Below is a
+when building a large number of standalone IoT devices running RKE2. Below is a
 hypothetical situation where we are to deploy 25 Raspberry Pi devices, each a
 standalone system and not a cluster of 25 nodes. To do this we'd use a playbook
 similar to the below:
@@ -302,11 +302,11 @@ the play hosts.
 
 See: [High Availability with an External DB](https://rancher.com/docs/rke2/latest/en/installation/ha/)
 
-It is also possible, though not supported, to run a single K3s control node
+It is also possible, though not supported, to run a single RKE2 control node
 with a `datastore-endpoint` defined. As this is not a typically supported
 configuration you will need to set `rke2_use_unsupported_config` to `true`.
 
-Since K3s v1.19.1 it is possible to use an embedded Etcd as the backend
+Since RKE2 v1.19.1 it is possible to use an embedded Etcd as the backend
 database, and this is done by setting `rke2_etcd_datastore` to `true`.
 The best practice for Etcd is to define at least 3 members to ensure quorum is
 established. In addition to this, an odd number of members is recommended to

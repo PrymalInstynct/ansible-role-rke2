@@ -25,10 +25,10 @@ rke2_build_cluster: true
 # URL for GitHub project
 rke2_github_url: https://github.com/rancher/rke2
 
-# URL for K3s updates API
+# URL for RKE2 updates API
 rke2_api_url: https://update.rke2.io
 
-# Install K3s in Air Gapped scenarios
+# Install RKE2 in Air Gapped scenarios
 rke2_airgap: false
 
 # Skip all tasks that validate configuration

@@ -1,6 +1,6 @@
 # IPv4 and IPv6 Dual-stack config
 
-If you need to run your K3S cluster with both IPv4 and IPv6 address ranges
+If you need to run your RKE2 cluster with both IPv4 and IPv6 address ranges
 you will need to configure the `rke2_server.cluster-cidr` and
 `rke2_server.service-cidr` values specifying both ranges.
 

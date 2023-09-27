@@ -1,4 +1,4 @@
-# Quickstart: K3s cluster with a single control node
+# Quickstart: RKE2 cluster with a single control node
 
 This is the quickstart guide to creating your own rke2 cluster with one control
 plane node. This control plane node will also be a worker.

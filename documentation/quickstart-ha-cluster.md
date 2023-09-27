@@ -1,4 +1,4 @@
-# Quickstart: K3s cluster with a HA control plane using embedded etcd
+# Quickstart: RKE2 cluster with a HA control plane using embedded etcd
 
 This is the quickstart guide to creating your own 3 node rke2 cluster with a
 highly available control plane using the embedded etcd datastore.

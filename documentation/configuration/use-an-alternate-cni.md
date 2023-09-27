@@ -1,6 +1,6 @@
 # Use an alternate CNI
 
-K3S ships with Flannel, however sometimes you want an different CNI such as
+RKE2 ships with Flannel, however sometimes you want an different CNI such as
 Calico, Canal or Weave Net. To do this you will need to disable Flannel with
 `flannel-backend: "none"`, specify a `cluster-cidr` and add your CNI manifests
 to the `rke2_server_manifests_templates`.
@@ -21,7 +21,7 @@ Steps:
 ```yaml
 ---
 
-# K3S Server config, don't deploy flannel and set cluster pod CIDR.
+# RKE2 Server config, don't deploy flannel and set cluster pod CIDR.
 rke2_server:
   cluster-cidr: 192.168.0.0/16
   flannel-backend: "none"

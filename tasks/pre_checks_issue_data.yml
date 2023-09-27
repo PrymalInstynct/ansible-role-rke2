@@ -53,7 +53,7 @@
       {{ ansible_play_hosts | to_json }}
       # End PLAY HOSTS
 
-      # Begin K3S ROLE CONFIG
+      # Begin RKE2 ROLE CONFIG
       {% for host in ansible_play_hosts %}
       ## {{ host }}
       {% for config_key in hostvars[host] %}
@@ -63,16 +63,16 @@
       {% endfor %}
 
       {% endfor %}
-      # End K3S ROLE CONFIG
+      # End RKE2 ROLE CONFIG
 
-      # Begin K3S RUNTIME CONFIG
+      # Begin RKE2 RUNTIME CONFIG
       {% for host in ansible_play_hosts %}
       ## {{ host }}
       {% if hostvars[host].rke2_runtime_config is defined %}
       {{ hostvars[host].rke2_runtime_config }}
       {% endif %}
       {% endfor %}
-      # End K3S RUNTIME CONFIG
+      # End RKE2 RUNTIME CONFIG
     mode: 0600
   delegate_to: localhost
   run_once: true

@@ -1,4 +1,4 @@
-# Quickstart: K3s single node
+# Quickstart: RKE2 single node
 
 This is the quickstart guide to creating your own single-node rke2 "cluster".
 
