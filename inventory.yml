@@ -1,28 +1,131 @@
 ---
 rke2_cluster:
+  vars:
+    coredns_addr: "10.43.0.10"
+    kube_vip_addr: "10.10.111.150"
+    cluster_cidr: "10.42.0.0/16"
+    service_cidr: "10.43.0.0/16"
+    node_cidr: "10.10.111.0/24"
   hosts:
     control01:
-      ansible_user: hemsworth
-      ansible_host: 10.10.120.70
+      ansible_user: zimmermanc
+      ansible_host: 10.10.111.240
       ansible_python_interpreter: /usr/bin/python3
       rke2_control_node: true
+      rke2_install_hard_links: true
+      rke2_become: true
+      rke2_etcd_datastore: true
+      rke2_use_unsupported_config: true
+      rke2_registration_address: "{{ kube_vip_addr }}"
+      rke2_server_pod_manifests_templates:
+        - kube-vip-static-pod.yaml.j2
+      rke2_server:
+        node-ip: "{{ ansible_host }}"
+        write-kubeconfig-mode: "0644"
+        tls-san:
+          - "{{ kube_vip_addr }}"
+        # Make a etcd snapshot every 2 hours
+        etcd-snapshot-schedule-cron: " */2 * * *"
+        # Keep 56 etcd snapshorts (equals to 2 weeks with 6 a day)
+        etcd-snapshot-retention: 56
+        cni:
+          - canal
+        disable-kube-proxy: "false"
+        cluster-cidr: "{{ cluster_cidr }}"
+        service-cidr: "{{ service_cidr }}"
+        selinux: "true"
+        disable:
+          - rke2-ingress-nginx
+        kubelet-arg:
+          - "max-pods=100"
+          - "eviction-hard=memory.available<250Mi"
+          - "eviction-soft=memory.available<1Gi"
+          - "eviction-soft-grace-period=memory.available=2m"
+          - "kube-reserved=cpu=200m,memory=500Mi"
+          - "system-reserved=cpu=200m,memory=500Mi"
     control02:
-      ansible_user: hemsworth
-      ansible_host: 10.10.120.71
+      ansible_user: zimmermanc
+      ansible_host: 10.10.111.219
       ansible_python_interpreter: /usr/bin/python3
       rke2_control_node: true
+      rke2_install_hard_links: true
+      rke2_become: true
+      rke2_etcd_datastore: true
+      rke2_use_unsupported_config: true
+      rke2_registration_address: "{{ kube_vip_addr }}"
+      rke2_server_pod_manifests_templates:
+        - kube-vip-static-pod.yaml.j2
+      rke2_server:
+        node-ip: "{{ ansible_host }}"
+        write-kubeconfig-mode: "0644"
+        tls-san:
+          - "{{ kube_vip_addr }}"
+        # Make a etcd snapshot every 2 hours
+        etcd-snapshot-schedule-cron: " */2 * * *"
+        # Keep 56 etcd snapshorts (equals to 2 weeks with 6 a day)
+        etcd-snapshot-retention: 56
+        cni:
+          - canal
+        disable-kube-proxy: "false"
+        cluster-cidr: "{{ cluster_cidr }}"
+        service-cidr: "{{ service_cidr }}"
+        selinux: "true"
+        disable:
+          - rke2-ingress-nginx
+        kubelet-arg:
+          - "max-pods=100"
+          - "eviction-hard=memory.available<250Mi"
+          - "eviction-soft=memory.available<1Gi"
+          - "eviction-soft-grace-period=memory.available=2m"
+          - "kube-reserved=cpu=200m,memory=500Mi"
+          - "system-reserved=cpu=200m,memory=500Mi"
     control03:
-      ansible_user: hemsworth
-      ansible_host: 10.10.120.72
+      ansible_user: zimmermanc
+      ansible_host: 10.10.111.246
       ansible_python_interpreter: /usr/bin/python3
       rke2_control_node: true
-    worker04:
-      ansible_user: hemsworth
-      ansible_host: 10.10.120.73
-      ansible_python_interpreter: /usr/bin/python3
-      rke2_control_node: false
-    worker05:
-      ansible_user: hemsworth
-      ansible_host: 10.10.120.74
-      ansible_python_interpreter: /usr/bin/python3
-      rke2_control_node: false
+      rke2_install_hard_links: true
+      rke2_become: true
+      rke2_etcd_datastore: true
+      rke2_use_unsupported_config: true
+      rke2_registration_address: "{{ kube_vip_addr }}"
+      rke2_server_pod_manifests_templates:
+        - kube-vip-static-pod.yaml.j2
+      rke2_server:
+        node-ip: "{{ ansible_host }}"
+        write-kubeconfig-mode: "0644"
+        tls-san:
+          - "{{ kube_vip_addr }}"
+        # Make a etcd snapshot every 2 hours
+        etcd-snapshot-schedule-cron: " */2 * * *"
+        # Keep 56 etcd snapshorts (equals to 2 weeks with 6 a day)
+        etcd-snapshot-retention: 56
+        cni:
+          - canal
+        disable-kube-proxy: "false"
+        cluster-cidr: "{{ cluster_cidr }}"
+        service-cidr: "{{ service_cidr }}"
+        selinux: "true"
+        disable:
+          - rke2-ingress-nginx
+        kubelet-arg:
+          - "max-pods=100"
+          - "eviction-hard=memory.available<250Mi"
+          - "eviction-soft=memory.available<1Gi"
+          - "eviction-soft-grace-period=memory.available=2m"
+          - "kube-reserved=cpu=200m,memory=500Mi"
+          - "system-reserved=cpu=200m,memory=500Mi"
+    # worker04:
+    #   ansible_user: zimmermanc
+    #   ansible_host: 10.10.111.73
+    #   ansible_python_interpreter: /usr/bin/python3
+    #   rke2_control_node: false
+    #   rke2_agent:
+    #     node-ip: "{{ ansible_host }}"
+    # worker05:
+    #   ansible_user: zimmermanc
+    #   ansible_host: 10.10.111.74
+    #   ansible_python_interpreter: /usr/bin/python3
+    #   rke2_control_node: false
+    #   rke2_agent:
+    #     node-ip: "{{ ansible_host }}"

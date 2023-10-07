@@ -24,6 +24,7 @@
   ansible.builtin.stat:
     path: "{{ rke2_token_location }}"
   register: rke2_token_cluster_check
+  become: "{{ rke2_become }}"
 
 - name: Ensure control plane started with {{ ansible_service_mgr }}
   ansible.builtin.include_tasks: ensure_control_plane_started_{{ ansible_service_mgr }}.yml

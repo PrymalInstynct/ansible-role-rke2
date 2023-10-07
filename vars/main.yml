@@ -66,14 +66,12 @@ rke2_runtime_config: "{{
   (rke2_control_node is defined and rke2_control_node)
   | ternary((rke2_server | default({})) | combine(rke2_agent | default({})),
       (rke2_agent | default({})),
-      (rke2_server | default({})) | combine(rke2_agent | default({})))
-}}"
+      (rke2_server | default({})) | combine(rke2_agent | default({})))}}"
 
 # Determine if a cluster should be built
 rke2_conf_build_cluster: "{{
   not ((ansible_play_hosts_all | length < 2)
-  and rke2_registration_address is not defined)
-}}"
+  and rke2_registration_address is not defined)}}"
 
 # Empty array for counting the number of control plane nodes
 rke2_controller_list: []
@@ -106,7 +104,7 @@ rke2_data_dir: "{{ rke2_runtime_config['data-dir'] | default('/var/lib/rancher/r
 rke2_config_dir: "{{ rke2_config_file | dirname }}"
 
 # Directory for gathering the rke2 token for clustering. I don't see this changing.
-rke2_token_location: "{{ rke2_config_dir }}/cluster-token"
+rke2_token_location: "/var/lib/rancher/rke2/server/node-token"
 
 # Path for additional Kubernetes Manifests
 # https://rancher.com/docs/rke2/latest/en/advanced/#auto-deploying-manifests
