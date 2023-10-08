@@ -9,7 +9,7 @@ rke2_cluster:
   hosts:
     control01:
       ansible_user: zimmermanc
-      ansible_host: 10.10.111.240
+      ansible_host: 10.10.111.224
       ansible_python_interpreter: /usr/bin/python3
       rke2_control_node: true
       rke2_install_hard_links: true
@@ -45,7 +45,7 @@ rke2_cluster:
           - "system-reserved=cpu=200m,memory=500Mi"
     control02:
       ansible_user: zimmermanc
-      ansible_host: 10.10.111.219
+      ansible_host: 10.10.111.226
       ansible_python_interpreter: /usr/bin/python3
       rke2_control_node: true
       rke2_install_hard_links: true
@@ -81,7 +81,7 @@ rke2_cluster:
           - "system-reserved=cpu=200m,memory=500Mi"
     control03:
       ansible_user: zimmermanc
-      ansible_host: 10.10.111.246
+      ansible_host: 10.10.111.241
       ansible_python_interpreter: /usr/bin/python3
       rke2_control_node: true
       rke2_install_hard_links: true
